@@ -1,8 +1,29 @@
-import { View, Text, TextInput, Pressable, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, Image, Alert, FlatList } from 'react-native';
 import logo from "../assets/images/logo.png"
 import { Colors } from '../constants/Colors';
+import Task from '../components/Task';
+import React, { useState } from 'react'
+
+const initialTasks = [
+  {id: 1, completed: true, text: "Estudar React Native"}
+]
+
 
 export default function ListaDeTarefas() {
+
+  const [tasks, setTasks] = useState(initialTasks)
+  const [text, setNewTask] = useState("")
+
+  const addTask = () => {
+    const newTask = {
+      id: tasks.length + 1,
+      completed: false,
+      text,
+    };
+    setTasks([...tasks, newTask]);
+    setNewTask('');
+    Alert.alert("Tarefa Adicionada", `Você adicionou: ${text}`)
+  }
 
 
   return (
@@ -13,22 +34,44 @@ export default function ListaDeTarefas() {
       </View>
 
         <View style={style.containerInput}>
-          <TextInput style={style.estiloInput} placeholder='Adicionar Tarefa' placeholderTextColor={'white'}/>
+          <TextInput 
+          style={style.estiloInput} 
+          placeholder='Adicionar Tarefa' 
+          placeholderTextColor={'white'}
+          onChangeText={setNewTask}
+          value={text}/>
 
-          <Pressable style={({pressed}) => [
+          <Pressable 
+          onPress={addTask}
+          style=
+{({ pressed }) => [
             style.Pressionar, {
               backgroundColor: pressed ? 'white' : Colors.primary,
             },
-          ]}
-          
-          >
-              <Text style={style.textInput}>Adicionar</Text>
+          ]}>
+
+{({ pressed }) => (
+  <Text
+    style={[
+      style.textInput,
+      {
+        color: pressed ? "#40B7AD" : "#fff",
+        fontWeight: pressed ? 'bold' : '500',
+      },
+    ]}> Adicionar </Text>
+)}
           </Pressable>
+
+          <FlatList
+          style={style.listaAtividades}
+          data={tasks}
+          renderItem={({ item }) => (
+            <Task text={item.text} initialCompleted={item.completed} />
+          )}
+          
+          />
         </View>
-
     </View>
-
-
   );
 }
 
@@ -88,5 +131,13 @@ const style = StyleSheet.create({
   textInput: {
     color: 'white',
     fontWeight: 'bold',
-  }
+  },
+
+  listaAtividades: {
+    borderRadius: 10,
+    width: 'auto',
+    backgroundColor: '#4CD9CD',
+    padding: 15,
+    marginBottom: 15
+   }
 });
