@@ -1,26 +1,29 @@
-import { View, Text, TextInput, Pressable } from 'react-native';
-import styles from './style';
+import { Text, Animated } from "react-native";
+import styles from './style'
+import { useRef, useEffect } from "react";
 
-export default function Form() {
+export default function ResultIMC(props) { // propriedades
+    const fadeAnim = useRef(new Animated.Value(0)).current
+
+    useEffect(() => {
+        if ( props.messageResultImc 
+            && props.messageResultImc !== 'Preencha o peso e altura' 
+            && props.resultIMC ) {
+
+            fadeAnim.setValue(0);
+
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 800,
+                useNativeDriver: true,
+            }).start();
+        }
+    }, [props.messageResultImc, props.resultIMC, fadeAnim]);
+
     return (
-        <View style={styles.form}>
-            <Text style={styles.label}>Altura (cm)</Text>
-            <TextInput 
-            style={styles.input} 
-            placeholder='Ex: 170cm'
-            keyboardType='numeric'
-            />
-
-            <Text style={styles.label}>Peso (kg)</Text>
-            <TextInput 
-            style={styles.input} 
-            placeholder='Ex: 70kg'
-            keyboardType='numeric'
-            />
-
-            <Pressable style={styles.buttonCalculator}>
-                <Text style={styles.buttonCalculatorText}>Calcular</Text>
-            </Pressable>
-        </View>
+        <Animated.View style={{opacity: fadeAnim}}>
+            <Text style={styles.textResult}>{props.messageResultImc}</Text>
+            <Text style={styles.textImcResult}>{props.resultIMC}</Text>
+        </Animated.View>
     )
 }
