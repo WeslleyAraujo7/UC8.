@@ -17,6 +17,21 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 
+    buttonShare: {
+        backgroundColor: '#1877f2',
+        borderRadius: 20,
+        padding: 10,
+        marginTop: 8,
+        marginLeft: 50,
+        marginRight: 50
+    },
+
+    textButtonShare: {
+        color: '#fff',
+        textAlign: 'center',
+        fontWeight: 'bold'
+    }
+
 })
 
 export default styles;

@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Pressable, Animated } from 'react-native';
+import { View, Text, TextInput, Pressable, Animated, Vibration, Keyboard } from 'react-native';
 import styles from './style'
 import { useState, useRef, useEffect } from 'react';
 import ResultIMC from './ResultImc';
@@ -9,6 +9,7 @@ export default function Form() {
     const [messageImc, setMessageImc] = useState('Preencha o peso e a altura.');
     const [imc, setImc] = useState(null);
     const [textButton, setTextButton] = useState('Calcular');
+    const [errorMessage, setErrorMessage] = useState(null)
 
     const slideAnim = useRef(new Animated.Value(100)).current;
 
@@ -37,8 +38,21 @@ export default function Form() {
         return (weightNum / (heightNum * heightNum)).toFixed(2);
     }
 
-// FUNÇÃO DE VALIDAÇÃO
+    // função de verificar campos vazios
+
+    function verificationImc() {
+        if (imc === null) {
+            Vibration.vibrate(1000)
+            setErrorMessage('Campo Obrigatório*')
+                return;
+        }
+    }
+
+// FUNÇÃO DE VALIDAÇÃO setCoisas useState
     function validationImc() {
+
+        Keyboard.dismiss()
+
         if (weight != null && height != null) {
             const calculatedImc = imcCalculator()
             setImc(calculatedImc)
@@ -46,14 +60,19 @@ export default function Form() {
             setWeight(null);
             setMessageImc('Seu IMC é igual a: ');
             setTextButton('Calcular novamente');
+            setErrorMessage(null)
             return;
         }
+        verificationImc()
         setImc(null)
         setTextButton('Calcular IMC');
         setMessageImc('Preencha o peso e a altura.');
     }
 
     return (
+        <Pressable onPress={() => Keyboard.dismiss()}>
+
+        
         <Animated.View
         style={[
             styles.formContainer, {
@@ -63,6 +82,8 @@ export default function Form() {
                 }],
             },
         ]}
+
+        // constantes
         >
         <View style={styles.form}>
             <Text style={styles.label}>Altura (cm)</Text>
@@ -73,6 +94,7 @@ export default function Form() {
             placeholder='Ex: 1.70m'
             keyboardType='numeric'
             />
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
 
             <Text style={styles.label}>Peso (kg)</Text>
             <TextInput 
@@ -82,6 +104,7 @@ export default function Form() {
             placeholder='Ex: 70kg'
             keyboardType='numeric'
             />
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
 
             <Pressable 
             style={styles.buttonCalculator}
@@ -92,5 +115,6 @@ export default function Form() {
             <ResultIMC messageResultImc={messageImc} resultIMC={imc} />
         </View>
         </Animated.View>
+        </Pressable>
     )
 }
