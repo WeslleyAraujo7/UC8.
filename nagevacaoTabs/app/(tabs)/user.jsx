@@ -1,10 +1,10 @@
 import { View, Text } from 'react-native'
 
 
-export default function Search() {
+export default function User() {
     return (
         <View>
-            <Text>Search</Text>    
+            <Text>User Profile</Text>    
         </View>
     )
 }
