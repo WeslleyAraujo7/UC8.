@@ -17,7 +17,7 @@ export default function DraggbleSquare() {
   const rotation = useSharedValue(0);
   const backgroundColor = useSharedValue("#3498db");
 
-  // Gesto de arrastar PAN
+// INÍCIO DO GESTO PAN
   const panGesture = Gesture.Pan()
 
     .onStart(() => {
@@ -34,21 +34,39 @@ export default function DraggbleSquare() {
       translateX.value = withSpring(translateX.value);
       translateY.value = withSpring(translateY.value);
     });
-  // fim do gesto PAN
+// FIM DO GESTO PAN
 
-  // GESTO TAP
+
+// INICIO GESTO TAP
   const tapGesture = Gesture.Tap().onEnd(() => {
     backgroundColor.value = backgroundColor.value === "#3498db" ? "#e74c3c" : "#3498db"
   })
 // FIM DO GESTO TAP
 
-  const composedGesture = Gesture.Simultaneous(Gesture.Exclusive(panGesture, tapGesture),
+
+// INICIO GESTO DE PINÇA(ZOOM)
+const pinchGesture = Gesture.Pinch().onUpdate((event) => {
+  scale.value = interpolate(event.scale, [0.5, 3], [0.5, 3]);
+});
+// FIM DO GESTO PINÇA
+
+
+// INICIO DO GESTO ROTAÇÃO
+const rotationGesture = Gesture.rotation().onUpdate((event) => {
+  rotation.value = event.rotation;
+})
+// FIM DO GESTO ROTATION
+
+
+  const composedGesture = Gesture.Simultaneous(Gesture.Exclusive(panGesture, tapGesture, pinchGesture, rotationGesture),
 );
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       { translateX: translateX.value },
       { translateY: translateY.value },
+
+      { scale: scale.value }
     ],
     backgroundColor: backgroundColor.value,
   }));
