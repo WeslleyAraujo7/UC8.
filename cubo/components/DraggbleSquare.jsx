@@ -52,7 +52,7 @@ const pinchGesture = Gesture.Pinch().onUpdate((event) => {
 
 
 // INICIO DO GESTO ROTAÇÃO
-const rotationGesture = Gesture.rotation().onUpdate((event) => {
+const rotationGesture = Gesture.Rotation().onUpdate((event) => {
   rotation.value = event.rotation;
 })
 // FIM DO GESTO ROTATION

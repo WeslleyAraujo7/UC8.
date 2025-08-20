@@ -58,6 +58,22 @@ export default StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 16
+    },
+
+    card: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#ffe4b5',
+        padding: 10,
+        marginVertical: 8,
+        borderRadius: 10
+    },
+
+    avatar: {
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        marginRight: 12
     }
 
 })

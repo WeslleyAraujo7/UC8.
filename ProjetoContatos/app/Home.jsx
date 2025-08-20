@@ -1,31 +1,29 @@
-import { View, Text, Image, Pressable,} from 'react-native'
-import { Link } from 'expo-router';
-import styles from '../styles/styles'
-
+import { View, Text, Image, Pressable } from "react-native";
+import { Link } from "expo-router";
+import styles from "../styles/styles";
 export default function Home() {
-    return (
-        <View style={styles.container}>
+  return (
+    <View style={styles.container}>
+      <View style={styles.subContainer}>
+        <Image
+          style={styles.image}
+          source={require("../assets/images/Pokebola-pokeball-png-0.png")}
+        />
 
-        <View style={styles.subContainer}>
-            <Image 
-            style={styles.image}
-            source={require('../assets/images/Pokebola-pokeball-png-0.png')}/>
+        <Text style={styles.title}> Bem-vindo ao App de Pokemon </Text>
 
-                <Text style={styles.title}> Bem Vindo ao App de Pokemon </Text>
+        <Text style={styles.description}>
+          Veja todos os seus pokemons preferidos !
+        </Text>
 
-                <Text style={styles.description}> Veja seus Pokemons preferidos </Text>
-
-                <View style={styles.buttonView}>
-
-                <Link href={'/Pokemons'}>
-                <Pressable style={styles.button}>
-                    <Text style={styles.textButton}> Ver lista de Pokemons </Text>
-                </Pressable>
-                </Link>
-
-                </View>
+        <View style={styles.buttonView} >
+          <Link href="/Contacts" >
+            <Pressable style={styles.button}>
+              <Text style={styles.textButton}>Ver lista de Pokemons</Text>
+            </Pressable>
+          </Link>
         </View>
-
-        </View>
-    )
+      </View>
+    </View>
+  );
 }

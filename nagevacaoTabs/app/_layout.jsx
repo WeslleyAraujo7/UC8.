@@ -5,7 +5,7 @@ import { StatusBar } from "react-native";
 export default function RootLayout() {
   return (
     <>
-      <StatusBar />
+      <StatusBar/>
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: "#e94560" },
