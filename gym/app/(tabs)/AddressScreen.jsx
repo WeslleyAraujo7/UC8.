@@ -1,97 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
-import * as Location from 'expo-location';
+import React, { useState } from "react";
+import { View, Text, TextInput, Button, StyleSheet, Alert } from "react-native";
 
-export default function NearbyGymsScreen({ theme }) {
-  const [location, setLocation] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function AddressScreen({ route, navigation, theme }) {
+  const { alunoNome } = route.params || {};
+  const [cep, setCep] = useState("");
+  const [endereco, setEndereco] = useState(null);
 
-  // Lista de academias fictícias
-  const gyms = [
-    {
-      id: '1',
-      title: 'Academia PowerFit',
-      coordinate: { latitude: -23.561684, longitude: -46.625378 },
-    },
-    {
-      id: '2',
-      title: 'Smart Gym',
-      coordinate: { latitude: -23.563210, longitude: -46.654321 },
-    },
-    {
-      id: '3',
-      title: 'Academia Strong Life',
-      coordinate: { latitude: -23.565000, longitude: -46.640000 },
-    },
-  ];
+  async function buscarEndereco() {
+    if (cep.length !== 8) {
+      Alert.alert("Erro", "Digite um CEP válido com 8 digitos");
+      return;
+    }
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await response.json();
 
-  useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('Permissão negada', 'Não foi possível acessar sua localização.');
-        setLoading(false);
-        return;
+      if (data.erro) {
+        Alert.alert("Erro", "CEP não encontrado.");
+      } else {
+        setEndereco(data);
       }
+    } catch (_error) {
+      Alert.alert("Erro", "Não foi possível buscar o endereço.");
+    }
+  }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location.coords);
-      setLoading(false);
-    })();
-  }, []);
-
-  if (loading) {
-    return (
-      <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <ActivityIndicator size="large" color={theme.text} />
-      </View>
-    );
+  async function salvarEndereco() {
+    try {
+      Alert.alert("Sucesso", `Endereço salvo para o aluno ${alunoNome}!`);
+      navigation.goBack();
+    } catch (_error) {
+      Alert.alert("Erro", "Não foi possível salvar o endereço.");
+    }
   }
 
   return (
-    <View style={styles.container}>
-      {location && (
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: location.latitude,
-            longitude: location.longitude,
-            latitudeDelta: 0.02,
-            longitudeDelta: 0.02,
-          }}
-        >
-          {/* Local do usuário */}
-          <Marker
-            coordinate={{
-              latitude: location.latitude,
-              longitude: location.longitude,
-            }}
-            title="Você está aqui"
-            pinColor="blue"
-          />
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.label, { color: theme.text }]}>
+        Cadastrar endereço para {alunoNome}
+      </Text>
 
-          {/* Academias */}
-          {gyms.map((gym) => (
-            <Marker
-              key={gym.id}
-              coordinate={gym.coordinate}
-              title={gym.title}
-              pinColor="red"
+      <TextInput
+        style={[styles.input, { borderColor: theme.text, color: theme.text }]}
+        placeholder="Digite o cep"
+        value={cep}
+        onChangeText={setCep}
+        keyboardType="numeric"
+        placeholderTextColor="#888"
+      />
+
+      <Button title="Buscar" onPress={buscarEndereco} color="#4CAF50" />
+
+      {endereco && (
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ color: theme.text }}>Rua:{endereco.logradouro}</Text>
+          <Text style={{ color: theme.text }}>Bairro:{endereco.bairro}</Text>
+          <Text style={{ color: theme.text }}>
+            Cidade:{endereco.localidade}
+          </Text>
+          <Text style={{ color: theme.text }}>Estado:{endereco.uf}</Text>
+
+          <View style={{ marginTop: 10 }}>
+            <Button
+              title="Salvar endereço"
+              onPress={salvarEndereco}
+              color="#2196f3"
             />
-          ))}
-        </MapView>
+          </View>
+        </View>
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  map: {
-    width: '100%',
-    height: '100%',
+  container: { flex: 1, padding: 20 },
+  label: { fontSize: 16, marginBottom: 10 },
+  input: {
+    borderWidth: 1,
+    padding: 8,
+    marginBottom: 10,
+    borderRadius: 5,
   },
 });

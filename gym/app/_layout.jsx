@@ -11,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 import HomeScreen from "./(tabs)/HomeScreen";
 import SettingsScreen from "./(tabs)/SettingsScreen";
+import AddressScreen from "./(tabs)/AddressScreen";
 
 //Importando tema claro e escuro
 
@@ -29,6 +30,13 @@ function HomeStack ({theme}) {
             options={{headerShown: false}}
             component={(props) => <HomeScreen {...props} theme={theme} />}
             />
+
+          <Stack.Screen
+            name="CadastroEndereco"
+             options={{headerShown: false}}
+            component={(props) => <AddressScreen {...props} theme={theme} />}
+          />
+          
         </Stack.Navigator>
     )
 }
