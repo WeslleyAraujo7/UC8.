@@ -53,12 +53,12 @@ export default function AddressScreen({ route, navigation, theme }) {
 
       {endereco && (
         <View style={{ marginTop: 20 }}>
-          <Text style={{ color: theme.text }}>Rua:{endereco.logradouro}</Text>
-          <Text style={{ color: theme.text }}>Bairro:{endereco.bairro}</Text>
+          <Text style={{ color: theme.text }}>Rua: {endereco.logradouro}</Text>
+          <Text style={{ color: theme.text }}>Bairro: {endereco.bairro}</Text>
           <Text style={{ color: theme.text }}>
-            Cidade:{endereco.localidade}
+            Cidade: {endereco.localidade}
           </Text>
-          <Text style={{ color: theme.text }}>Estado:{endereco.uf}</Text>
+          <Text style={{ color: theme.text }}>Estado: {endereco.uf}</Text>
 
           <View style={{ marginTop: 10 }}>
             <Button

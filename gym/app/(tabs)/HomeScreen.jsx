@@ -1,4 +1,4 @@
-import React, { useState, useRef, use } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
   title:{
     fontSize:18,
     fontWeight: "bold",
-    marginBottom: 15,
+    marginVertical: 50,
     textAlign: "center",
   },
   input: {
