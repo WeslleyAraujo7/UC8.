@@ -57,6 +57,61 @@ export default function App() {
     }
   };
 
+  const clearNotas = () =>{
+    Alert.alert(
+      "Limpar tudo",
+      "Ten certeza qye deseja apagar todas as notas?",
+      [
+        {text: "Cancelar", style: "cancel"},
+        {
+          text: "Apagar",
+          style: "destructive",
+          onPress: async () => persistNotas([]), 
+        }
+      ]
+    )
+  }
+
+  // ==================== BACKUP VIA FILESYSTEM ====================
+  // Função para exportar backup das notas para arquivo JSON
+  const exportBackup = async () => {
+    try {
+      // Define caminho do arquivo no diretório de documentos do app
+      const path = FileSystem.documentDirectory + "notes-backup.json";
+
+      // Escreve as notas em formato JSON no arquivo
+      await FileSystem.writeAsStringAsync(path, JSON.stringify(notas), {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+
+      // Confirma sucesso para o usuário com caminho do arquivo
+      Alert.alert("Backup criado", `Arquivo salvo em:\n${path}`);
+    } catch (_error) {
+      // Em caso de erro, notifica o usuário
+      Alert.alert("Erro", "Falha ao criar backup.");
+    }
+  };
+
+  // ==================== VISUALIZAR BACKUP ====================
+  // Função para ler e exibir conteúdo do backup diretamente no app
+  const showBackup = async () => {
+    try {
+      // Define mesmo caminho usado no export
+      const path = FileSystem.documentDirectory + "notes-backup.json";
+
+      // Lê conteúdo do arquivo
+      const content = await FileSystem.readAsStringAsync(path);
+
+      // Exibe conteúdo em um alerta
+      Alert.alert("Backup encontrado", content);
+    } catch (_error) {
+      // Se arquivo não existe ou erro de leitura
+      Alert.alert("Erro", "Não foi possível abrir o backup.");
+    }
+  };
+
+
+
   const addNota = () => {
     const text = nota.trim();
     if (!text) return;
@@ -107,6 +162,7 @@ export default function App() {
       const savedPin = await SecureStore.getItemAsync(PIN_KEY);
       if (savedPin && code === savedPin) {
         setPinInput("");
+        
       } else {
         Alert.alert("PIN incorreto", "Tente novamente.");
       }
@@ -185,6 +241,26 @@ export default function App() {
           <Text style={styles.muted}>Nenhuma nota ainda.</Text>
         }
       />
+
+      <View style={styles.actions}>
+        <TouchableOpacity onPress={clearNotas} style={[styles.button,styles.secondary]}>
+          <Text style={styles.buttonText}>Limpar tudo</Text>
+        </TouchableOpacity>
+
+
+        <TouchableOpacity onPress={exportBackup} style={[styles.button,styles.secondary]}>
+          <Text style={styles.buttonText}>Exportar Backup</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={showBackup} style={[styles.button,styles.secondary]}>
+          <Text style={styles.buttonText}>Mostrar Backup</Text>
+        </TouchableOpacity>
+
+      </View>
+
+
+
+
     </View>
   );
 }
