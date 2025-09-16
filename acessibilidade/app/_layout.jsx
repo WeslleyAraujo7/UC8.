@@ -7,9 +7,9 @@ import {
   AppState,
   findNodeHandle,
 } from "react-native";
-import {makeTheme} from "../styles/theme"
-import {makeGlobalStyles} from "../styles/globalStyles"
+import {makeTheme} from "../styles/theme";
+import {makeGlobalStyles} from "../styles/globalStyles";
 
-import HomeScreen from "./HomeScreen"
-import LockScreen from "./LockScreen"
-import SettingsScreen from "./SettingsScreen"
+import HomeScreen from "./HomeScreen";
+import LockScreen from "./LockScreen";
+import SettingsScreen from "./SettingsScreen";
